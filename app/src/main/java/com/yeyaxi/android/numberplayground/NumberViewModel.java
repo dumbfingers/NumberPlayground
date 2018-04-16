@@ -6,37 +6,38 @@ import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.math.BigDecimal;
 import java.util.HashMap;
 
 public class NumberViewModel extends ViewModel {
 
-    private MutableLiveData<Double> sumValue;
-    private HashMap<Integer, Double> values;
+    private MutableLiveData<BigDecimal> sumValue;
+    private HashMap<Integer, BigDecimal> values;
 
     @NonNull
-    public LiveData<Double> getSumValue() {
+    public LiveData<BigDecimal> getSumValue() {
         if (this.sumValue == null) {
             this.sumValue = new MutableLiveData<>();
-            this.sumValue.setValue(0d);
+            this.sumValue.setValue(BigDecimal.ZERO);
         }
         return this.sumValue;
     }
 
     public void updateValue(int key, @Nullable String text) throws NumberFormatException {
-        Double value = Double.valueOf(StringUtil.isNullOrWhitespace(text) ? "0" : text);
+        BigDecimal value = BigDecimal.valueOf(Double.valueOf(StringUtil.isNullOrWhitespace(text) ? "0" : text));
         getValues().put(key, value);
         updateSumValue();
     }
 
     private void updateSumValue() {
-        Double value = 0d;
-        for (Double each : getValues().values()) {
-            value += (each == null ? 0d : each);
+        BigDecimal value = BigDecimal.ZERO;
+        for (BigDecimal each : getValues().values()) {
+            value = value.add(each == null ? BigDecimal.ZERO : each);
         }
         this.sumValue.setValue(value);
     }
 
-    private HashMap<Integer, Double> getValues() {
+    private HashMap<Integer, BigDecimal> getValues() {
         if (this.values == null) {
             this.values = new HashMap<>();
         }

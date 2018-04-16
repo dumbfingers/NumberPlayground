@@ -2,12 +2,15 @@ package com.yeyaxi.android.numberplayground;
 
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import java.math.BigDecimal;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -29,7 +32,10 @@ public class MainActivity extends AppCompatActivity {
     EditText editText6;
     @BindView(R.id.textView)
     TextView textView;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
     private NumberViewModel model;
+    private Snackbar errMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,26 +43,36 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        this.model = ViewModelProviders.of(this).get(NumberViewModel.class);
-        this.model.getSumValue().observe(this, this::onUpdateSum);
+        setupErrorHandling();
+        setupViewModel();
     }
 
     @OnTextChanged(value = {R.id.editText1, R.id.editText2, R.id.editText3,
-                            R.id.editText4, R.id.editText5, R.id.editText6},
-                    callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
+            R.id.editText4, R.id.editText5, R.id.editText6},
+            callback = OnTextChanged.Callback.AFTER_TEXT_CHANGED)
     public void onValueChanged(Editable editable) {
         View view = getCurrentFocus();
         if (view == null) {
             return;
         }
         try {
+            this.errMsg.dismiss();
             this.model.updateValue(view.getId(), editable.toString());
         } catch (NumberFormatException nfe) {
-            Toast.makeText(this, R.string.error_number_format, Toast.LENGTH_LONG).show();
+            this.errMsg.show();
         }
     }
 
-    private void onUpdateSum(Double sumValue) {
-        this.textView.setText(String.valueOf(sumValue));
+    private void setupViewModel() {
+        this.model = ViewModelProviders.of(this).get(NumberViewModel.class);
+        this.model.getSumValue().observe(this, this::onUpdateSum);
+    }
+
+    private void setupErrorHandling() {
+        this.errMsg = Snackbar.make(this.coordinatorLayout, R.string.error_number_format, Snackbar.LENGTH_SHORT);
+    }
+
+    private void onUpdateSum(BigDecimal sumValue) {
+        this.textView.setText(sumValue.toPlainString());
     }
 }
