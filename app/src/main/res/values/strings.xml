@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">NumberPlayground</string>
+    <string name="error_number_format">Wrong Number Format Entered.</string>
 </resources>

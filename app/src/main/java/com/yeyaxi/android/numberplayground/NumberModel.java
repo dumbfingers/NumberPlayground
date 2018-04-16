@@ -1,13 +1,13 @@
 package com.yeyaxi.android.numberplayground;
 
 public class NumberModel {
-    private int numberValue;
+    private double numberValue;
 
     public NumberModel(int numberValue) {
         this.numberValue = numberValue;
     }
 
-    public int getNumberValue() {
+    public double getNumberValue() {
         return numberValue;
     }
 
