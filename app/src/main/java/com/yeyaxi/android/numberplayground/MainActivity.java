@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,8 +87,10 @@ public class MainActivity extends AppCompatActivity {
         this.errMsg = Snackbar.make(this.coordinatorLayout, R.string.error_number_format, Snackbar.LENGTH_SHORT);
     }
 
-    private void onUpdateSum(BigDecimal sumValue) {
-        this.textView.setText(sumValue.toPlainString());
+    void onUpdateSum(BigDecimal sumValue) {
+        DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
+        decimalFormat.setMinimumFractionDigits(0);
+        this.textView.setText(decimalFormat.format(sumValue));
     }
 
     private void startBlinkAnimation(View view) {
