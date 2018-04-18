@@ -5,6 +5,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.VisibleForTesting;
 
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -21,6 +22,11 @@ public class NumberViewModel extends ViewModel {
             this.sumValue.setValue(BigDecimal.ZERO);
         }
         return this.sumValue;
+    }
+
+    @VisibleForTesting
+    /* package */ void setSumValue(BigDecimal value) {
+        this.sumValue.setValue(value);
     }
 
     public void updateValue(int key, @Nullable String text) throws NumberFormatException {

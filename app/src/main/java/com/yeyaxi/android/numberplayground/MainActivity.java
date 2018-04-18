@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
         setupErrorHandling();
         setupViewModel();
+        observeValueChanges();
     }
 
     @OnClick(R.id.textView)
@@ -80,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewModel() {
         this.model = ViewModelProviders.of(this).get(NumberViewModel.class);
+    }
+
+    private void observeValueChanges() {
         this.model.getSumValue().observe(this, this::onUpdateSum);
     }
 
@@ -87,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         this.errMsg = Snackbar.make(this.coordinatorLayout, R.string.error_number_format, Snackbar.LENGTH_SHORT);
     }
 
-    void onUpdateSum(BigDecimal sumValue) {
+    private void onUpdateSum(BigDecimal sumValue) {
         DecimalFormat decimalFormat = (DecimalFormat) DecimalFormat.getNumberInstance();
         decimalFormat.setMinimumFractionDigits(0);
         this.textView.setText(decimalFormat.format(sumValue));
